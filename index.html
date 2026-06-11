@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Capital — Proposta BPO Premium</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+      background: #F2F5FA;
+      color: #0D2137;
+    }
+
+    /* ===== LOGIN MODAL ===== */
+    .login-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0D2137 55%, #1A3556 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    .login-container.hidden {
+      display: none;
+    }
+
+    .login-box {
+      background: white;
+      border-radius: 12px;
+      padding: 48px 40px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    .login-box h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #0D2137;
+    }
+
+    .login-box h1 span {
+      color: #C9922C;
+    }
+
+    .login-box p {
+      font-size: 14px;
+      color: #4A6580;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .login-input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1px solid #D8E4F0;
+      border-radius: 6px;
+      font-size: 15px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+
+    .login-input:focus {
+      outline: none;
+      border-color: #C9922C;
+      box-shadow: 0 0 0 3px rgba(201,146,44,0.1);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px 24px;
+      background: #C9922C;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .login-btn:hover {
+      background: #b07c1e;
+    }
+
+    .login-btn:active {
+      transform: scale(0.98);
+    }
+
+    .login-error {
+      color: #C0392B;
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    .login-error.show {
+      display: block;
+    }
+
+    .login-hint {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #E2EAF5;
+    }
+
+    /* ===== PROPOSTA (CONTEÚDO) ===== */
+    .proposta-container {
+      opacity: 1;
+      transition: opacity 0.3s;
+    }
+
+    .proposta-container.hidden {
+      display: none;
+    }
+
+    :root {
+      --navy:   #0D2137;
+      --navy2:  #1A3556;
+      --gold:   #C9922C;
+      --gold2:  #E8C05A;
+      --slate:  #4A6580;
+      --light:  #EEF3F9;
+      --white:  #FFFFFF;
+      --red:    #C0392B;
+      --green:  #1A7A4A;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--navy);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+      height: 56px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.35);
+    }
+
+    .nav-brand {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: .04em;
+    }
+
+    .nav-brand span { color: var(--gold2); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 28px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: rgba(255,255,255,.75);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      transition: color .2s;
+    }
+
+    nav a:hover { color: var(--gold2); }
+
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 55%, var(--navy2) 100%);
+      color: var(--white);
+      padding: 100px 48px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 6px; height: 100%;
+      background: var(--gold);
+    }
+
+    .hero-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--gold2);
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-size: 58px;
+      font-weight: 800;
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 span { color: var(--gold2); }
+
+    .hero-sub {
+      font-size: 17px;
+      color: rgba(255,255,255,.8);
+      margin-bottom: 36px;
+      line-height: 1.55;
+    }
+
+    .btn-cta {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 32px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background .2s, transform .15s;
+    }
+
+    .btn-cta:hover { background: #b07c1e; transform: translateY(-2px); }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      border-top: 3px solid var(--gold);
+      padding: 24px 20px;
+      border-radius: 6px;
+    }
+
+    .stat-num {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--gold2);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: rgba(255,255,255,.7);
+      line-height: 1.4;
+    }
+
+    section {
+      background: var(--white);
+      margin: 36px auto;
+      max-width: 960px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 14px rgba(13,33,55,.07);
+    }
+
+    .section-header {
+      background: var(--navy);
+      padding: 28px 36px 22px;
+      border-left: 6px solid var(--gold);
+    }
+
+    .section-header h2 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .section-header p {
+      font-size: 14px;
+      color: var(--gold2);
+      font-style: italic;
+    }
+
+    .section-body { padding: 36px; }
+
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,.5);
+      text-align: center;
+      padding: 24px 20px;
+      font-size: 13px;
+    }
+
+    footer strong { color: var(--gold2); }
+
+    @media (max-width: 700px) {
+      nav ul { display: none; }
+      .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+      .hero h1 { font-size: 40px; }
+      .hero-stats { grid-template-columns: 1fr 1fr; }
+      .login-box { padding: 36px 24px; }
+      .login-box h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div class="login-container" id="loginContainer">
+  <div class="login-box">
+    <h1>NEXUS <span>CAPITAL</span></h1>
+    <p>Acesse a proposta comercial com sua senha</p>
+    <input 
+      type="password" 
+      id="passwordInput" 
+      class="login-input" 
+      placeholder="Digite a senha"
+      autocomplete="off"
+    >
+    <button class="login-btn" onclick="verificarSenha()">Acessar</button>
+    <div class="login-error" id="loginError">Senha incorreta. Tente novamente.</div>
+    <div class="login-hint">💡 Dica: A senha foi enviada por e-mail</div>
+  </div>
+</div>
+
+<!-- ===== PROPOSTA ===== -->
+<div class="proposta-container hidden" id="propostaContainer">
+
+  <nav>
+    <div class="nav-brand">NEXUS <span>CAPITAL</span></div>
+    <ul>
+      <li><a href="#inicio">Início</a></li>
+      <li><a href="#servicos">Serviços BPO</a></li>
+      <li><a href="#diferenciais">Diferenciais</a></li>
+      <li><a href="#nao-fazemos">Escopo</a></li>
+      <li><a href="#clt-bpo">CLT vs BPO</a></li>
+      <li><a href="#cronograma">Cronograma</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero" id="inicio">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">Proposta Comercial · BPO Financeiro Premium</div>
+        <h1>NEXUS<br><span>CAPITAL</span></h1>
+        <p class="hero-sub">Consultoria Financeira &amp; BPO para empresas que crescem com inteligência financeira.</p>
+        <a class="btn-cta" href="#contato">Agendar Diagnóstico Gratuito →</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-num">8+</div>
+          <div class="stat-label">Anos em gestão PJ em Santander, Sicoob, Sicredi e Banco Stone</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">FGV/UFT</div>
+          <div class="stat-label">Gestão Financeira Empresarial + Contabilidade</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">PMEs</div>
+          <div class="stat-label">Micro, pequenas e médias empresas em Palmas–TO</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Digital, automatizado e com suporte dedicado</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="servicos">
+    <div class="section-header">
+      <h2>Serviços Financeiros (BPO) Inclusos</h2>
+      <p>Plataforma completa de gestão financeira com limites mensais claros</p>
+    </div>
+    <div class="section-body">
+      <p>Aqui vai o conteúdo completo da seção de serviços...</p>
+    </div>
+  </section>
+
+  <footer>
+    <strong>NEXUS CAPITAL</strong> — Consultoria Financeira &amp; BPO · Palmas–TO · 2026<br>
+    <span style="font-style:italic;color:rgba(255,255,255,.35);font-size:12px;">Conectando Empresas ao Crédito e à Gestão Financeira de Excelência</span>
+  </footer>
+
+</div>
+
+<script>
+  // Senha padrão (ALTERE PARA SUA SENHA)
+  const SENHA_CORRETA = "nexus2026";
+
+  function verificarSenha() {
+    const input = document.getElementById('passwordInput');
+    const senha = input.value;
+    const erro = document.getElementById('loginError');
+
+    if (senha === SENHA_CORRETA) {
+      // Login correto
+      document.getElementById('loginContainer').classList.add('hidden');
+      document.getElementById('propostaContainer').classList.remove('hidden');
+      
+      // Salva no localStorage (mantém logado por 24h)
+      localStorage.setItem('nexus_logado', 'true');
+      localStorage.setItem('nexus_timestamp', Date.now());
+    } else {
+      // Senha errada
+      erro.classList.add('show');
+      input.value = '';
+      input.focus();
+      
+      setTimeout(() => {
+        erro.classList.remove('show');
+      }, 3000);
+    }
+  }
+
+  // Enter para confirmar
+  document.getElementById('passwordInput')?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') verificarSenha();
+  });
+
+  // Verifica se já está logado
+  window.addEventListener('load', () => {
+    const logado = localStorage.getItem('nexus_logado');
+    const timestamp = localStorage.getItem('nexus_timestamp');
+    
+    if (logado && timestamp) {
+      const agora = Date.now();
+      const diferenca = (agora - parseInt(timestamp)) / (1000 * 60 * 60); // em horas
+      
+      if (diferenca < 24) {
+        // Mantém logado por 24 horas
+        document.getElementById('loginContainer').classList.add('hidden');
+        document.getElementById('propostaContainer').classList.remove('hidden');
+      } else {
+        // Expirou — volta ao login
+        localStorage.removeItem('nexus_logado');
+        localStorage.removeItem('nexus_timestamp');
+      }
+    }
+  });
+
+  // Logout (opcional)
+  function logout() {
+    localStorage.removeItem('nexus_logado');
+    localStorage.removeItem('nexus_timestamp');
+    location.reload();
+  }
+</script>
+
+</body>
+</html>
